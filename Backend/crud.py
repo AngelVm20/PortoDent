@@ -19,8 +19,9 @@ def update_paciente(db: Session, paciente: schemas.Paciente):
     db_paciente = get_paciente(db, paciente.ID_Paciente)
     if db_paciente is None:
         return None
-    for var, value in vars(paciente).items():
-        setattr(db_paciente, var, value) if value else None
+    for var, value in paciente.dict().items():
+        if value is not None:
+            setattr(db_paciente, var, value)
     db.add(db_paciente)
     db.commit()
     db.refresh(db_paciente)
@@ -33,8 +34,6 @@ def delete_paciente(db: Session, paciente_id: int):
     db.delete(db_paciente)
     db.commit()
     return db_paciente
-
-
 
 
 # Historia_Clinica CRUD operations

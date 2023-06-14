@@ -1,10 +1,10 @@
 from typing import List
-from fastapi import Depends, FastAPI, HTTPException
+from fastapi import Depends, APIRouter, HTTPException
 from sqlalchemy.orm import Session
 import crud, models, schemas
 from database import SessionLocal, engine
 
-router = FastAPI()
+router = APIRouter()
 
 def get_db():
     db = SessionLocal()
@@ -31,7 +31,7 @@ def create_paciente(paciente: schemas.PacienteCreate, db: Session = Depends(get_
     return db_paciente
 
 @router.put("/pacientes/{paciente_id}", response_model=schemas.Paciente)
-def update_paciente(paciente_id: int, paciente: schemas.PacienteCreate, db: Session = Depends(get_db)):
+def update_paciente(paciente_id: int, paciente: schemas.Paciente, db: Session = Depends(get_db)):
     db_paciente = crud.update_paciente(db=db, paciente=paciente)
     if db_paciente is None:
         raise HTTPException(status_code=404, detail="Paciente not found")
