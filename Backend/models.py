@@ -14,7 +14,6 @@ class Paciente(Base):
     Direccion = Column(String(100), nullable=False)
     Telefono = Column(String(20), nullable=True)
     Email = Column(String(100), nullable=True)
-    
     historia_clinica = relationship("Historia_Clinica", back_populates="paciente")
 
 

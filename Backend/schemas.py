@@ -3,6 +3,7 @@ from pydantic import BaseModel
 from datetime import date
 
 class PacienteBase(BaseModel):
+
     Cedula: str
     Nombre: str
     Apellido: str
@@ -16,7 +17,7 @@ class PacienteCreate(PacienteBase):
     pass
 
 class Paciente(PacienteBase):
-    ID_Paciente: int
+    ID_Paciente: Optional[int]
 
     class Config:
         orm_mode = True

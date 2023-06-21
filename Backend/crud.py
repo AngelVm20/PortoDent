@@ -2,6 +2,7 @@ from sqlalchemy.orm import Session
 
 import models, schemas
 
+#CRUD operations for Usuario
 def get_paciente(db: Session, paciente_id: int):
     return db.query(models.Paciente).filter(models.Paciente.ID_Paciente == paciente_id).first()
 
@@ -15,17 +16,18 @@ def create_paciente(db: Session, paciente: schemas.PacienteCreate):
     db.refresh(db_paciente)
     return db_paciente
 
-def update_paciente(db: Session, paciente: schemas.Paciente):
-    db_paciente = get_paciente(db, paciente.ID_Paciente)
+def update_paciente(db: Session, paciente_id: int, paciente: schemas.PacienteBase):
+    db_paciente = get_paciente(db, paciente_id)
     if db_paciente is None:
         return None
     for var, value in paciente.dict().items():
-        if value is not None:
+        if var != "ID_Paciente" and value is not None:
             setattr(db_paciente, var, value)
     db.add(db_paciente)
     db.commit()
     db.refresh(db_paciente)
     return db_paciente
+
 
 def delete_paciente(db: Session, paciente_id: int):
     db_paciente = get_paciente(db, paciente_id)
