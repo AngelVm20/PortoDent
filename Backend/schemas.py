@@ -3,7 +3,6 @@ from pydantic import BaseModel
 from datetime import date
 
 class PacienteBase(BaseModel):
-
     Cedula: str
     Nombre: str
     Apellido: str
