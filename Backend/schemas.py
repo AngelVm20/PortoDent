@@ -18,7 +18,6 @@ class PacienteCreate(PacienteBase):
 
 class Paciente(PacienteBase):
     ID_Paciente: Optional[int]
-
     class Config:
         orm_mode = True
 

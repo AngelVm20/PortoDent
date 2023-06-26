@@ -32,7 +32,7 @@ def create_paciente(paciente: schemas.PacienteCreate, db: Session = Depends(get_
 
 @router.put("/pacientes/{paciente_id}", response_model=schemas.Paciente)
 def update_paciente(paciente_id: int, paciente: schemas.Paciente, db: Session = Depends(get_db)):
-    db_paciente = crud.update_paciente(db=db, paciente=paciente)
+    db_paciente = crud.update_paciente(db=db, paciente_id=paciente_id, paciente=paciente)
     if db_paciente is None:
         raise HTTPException(status_code=404, detail="Paciente not found")
     return db_paciente
