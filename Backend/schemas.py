@@ -22,17 +22,6 @@ class Paciente(PacienteBase):
 
 class HistoriaClinicaBase(BaseModel):
     ID_Paciente: int
-    MotivoConsulta: Optional[str] = None
-    EnfActual: Optional[str] = None
-    Antecedentes: Optional[str] = None
-    SignosVitales: Optional[str] = None
-    ExamenEstomat: Optional[str] = None
-    Odontograma: Optional[str] = None
-    IndicadoresSalud: Optional[str] = None
-    IndicesCPO: Optional[str] = None
-    PlanDiagnostico: Optional[str] = None
-    Diagnostico: Optional[str] = None
-    Tratamientos: Optional[str] = None
 
 class HistoriaClinicaCreate(HistoriaClinicaBase):
     pass
@@ -44,8 +33,19 @@ class HistoriaClinica(HistoriaClinicaBase):
         orm_mode = True
 
 class ConsultaBase(BaseModel):
+    ID_HistoriaC: Optional[int] = None
     FechaConsulta: date
-    ID_Historia: int
+    EnfActual: Optional[str] = None
+    Antecedentes: Optional[str] = None
+    SignosVitales: Optional[str] = None
+    ExamenEstomat: Optional[str] = None
+    Odontograma: Optional[str] = None
+    IndicadoresSalud: Optional[str] = None
+    IndicesCPO: Optional[str] = None
+    PlanDiagnostico: Optional[str] = None
+    Diagnostico: Optional[str] = None
+    Tratamientos: Optional[str] = None
+    MotivoC: Optional[str] = None
 
 class ConsultaCreate(ConsultaBase):
     pass

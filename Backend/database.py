@@ -7,7 +7,7 @@ user= 'root'
 password= 'admin'
 
 
-SQLALCHEMY_DATABASE_URL = "mysql://root:admin@localhost/odontologiaDB"
+SQLALCHEMY_DATABASE_URL = "mysql://root:admin@localhost/portodentDB"
 
 engine = create_engine(
     SQLALCHEMY_DATABASE_URL

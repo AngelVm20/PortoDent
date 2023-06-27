@@ -1,47 +1,50 @@
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Date
+from sqlalchemy.dialects.mysql import VARCHAR
 from sqlalchemy.orm import relationship
-from database import Base
+from sqlalchemy.ext.declarative import declarative_base
+
+Base = declarative_base()
 
 class Paciente(Base):
     __tablename__ = "Paciente"
 
     ID_Paciente = Column(Integer, primary_key=True, index=True)
-    Cedula = Column(String(20), nullable=False)
-    Nombre = Column(String(50), nullable=False)
-    Apellido = Column(String(50), nullable=False)
-    Sexo = Column(String(1), nullable=False)
-    FechaNacimiento = Column(Date, nullable=False)
-    Direccion = Column(String(100), nullable=False)
-    Telefono = Column(String(20), nullable=True)
-    Email = Column(String(100), nullable=True)
-    historia_clinica = relationship("Historia_Clinica", back_populates="paciente")
+    Cedula = Column(VARCHAR(20), index=True)
+    Nombre = Column(VARCHAR(50))
+    Apellido = Column(VARCHAR(50))
+    Sexo = Column(VARCHAR(10))
+    FechaNacimiento = Column(Date)
+    Direccion = Column(VARCHAR(100))
+    Telefono = Column(VARCHAR(20))
+    Email = Column(VARCHAR(100))
 
+    historias_clinicas = relationship("HistoriaClinica", back_populates="paciente")
 
-class Historia_Clinica(Base):
-    __tablename__ = "Historia_Clinica"
+class HistoriaClinica(Base):
+    __tablename__ = "HistoriaClinica"
 
-    ID_Historia = Column(Integer, primary_key=True, index=True)
+    ID_HistoriaC = Column(Integer, primary_key=True, index=True)
     ID_Paciente = Column(Integer, ForeignKey("Paciente.ID_Paciente"))
-    MotivoConsulta = Column(String, nullable=True)
-    EnfActual = Column(String, nullable=True)
-    Antecedentes = Column(String, nullable=True)
-    SignosVitales = Column(String, nullable=True)
-    ExamenEstomat = Column(String, nullable=True)
-    Odontograma = Column(String, nullable=True)
-    IndicadoresSalud = Column(String, nullable=True)
-    IndicesCPO = Column(String, nullable=True)
-    PlanDiagnostico = Column(String, nullable=True)
-    Diagnostico = Column(String, nullable=True)
-    Tratamientos = Column(String, nullable=True)
-    
-    paciente = relationship("Paciente", back_populates="historia_clinica")
-    consulta = relationship("Consulta", back_populates="historia_clinica")
+
+    paciente = relationship("Paciente", back_populates="historias_clinicas")
+    consultas = relationship("Consulta", back_populates="historia_clinica")
 
 class Consulta(Base):
     __tablename__ = "Consulta"
 
     ID_Consulta = Column(Integer, primary_key=True, index=True)
-    FechaConsulta = Column(Date, nullable=False)
-    ID_Historia = Column(Integer, ForeignKey("Historia_Clinica.ID_Historia"))
-    
-    historia_clinica = relationship("Historia_Clinica", back_populates="consulta")
+    ID_HistoriaC = Column(Integer, ForeignKey("HistoriaClinica.ID_HistoriaC"))
+    FechaConsulta = Column(Date)
+    EnfActual = Column(VARCHAR(200))
+    Antecedentes = Column(VARCHAR(200))
+    SignosVitales = Column(VARCHAR(200))
+    ExamenEstomat = Column(VARCHAR(200))
+    Odontograma = Column(VARCHAR(200))
+    IndicadoresSalud = Column(VARCHAR(200))
+    IndicesCPO = Column(VARCHAR(200))
+    PlanDiagnostico = Column(VARCHAR(200))
+    Diagnostico = Column(VARCHAR(200))
+    Tratamientos = Column(VARCHAR(200))
+    MotivoC = Column(VARCHAR(200))
+
+    historia_clinica = relationship("HistoriaClinica", back_populates="consultas")

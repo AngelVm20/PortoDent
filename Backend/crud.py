@@ -1,8 +1,7 @@
 from sqlalchemy.orm import Session
-
 import models, schemas
 
-#CRUD operations for Usuario
+# Operaciones CRUD para el modelo Paciente
 def get_paciente(db: Session, paciente_id: int):
     return db.query(models.Paciente).filter(models.Paciente.ID_Paciente == paciente_id).first()
 
@@ -31,36 +30,46 @@ def update_paciente(db: Session, paciente_id: int, paciente: schemas.PacienteBas
 
 def delete_paciente(db: Session, paciente_id: int):
     db_paciente = get_paciente(db, paciente_id)
-    if db_paciente is None:
-        return None
-    db.delete(db_paciente)
-    db.commit()
-    return db_paciente
+    if db_paciente:
+        db.delete(db_paciente)
+        db.commit()
+        return db_paciente
+    return None
 
-
-# Historia_Clinica CRUD operations
+# Operaciones CRUD para el modelo HistoriaClinica
 def get_historia_clinica(db: Session, historia_id: int):
-    return db.query(models.Historia_Clinica).filter(models.Historia_Clinica.ID_Historia == historia_id).first()
+    return db.query(models.HistoriaClinica).filter(models.HistoriaClinica.ID_HistoriaC == historia_id).first()
 
 def get_historias_clinicas(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.Historia_Clinica).offset(skip).limit(limit).all()
+    return db.query(models.HistoriaClinica).offset(skip).limit(limit).all()
 
-def create_historia_clinica(db: Session, historia: schemas.HistoriaClinicaCreate):
-    db_historia = models.Historia_Clinica(**historia.dict())
+def create_historia_clinica(db: Session, historia: schemas.HistoriaClinicaCreate, paciente_id: int):
+    db_historia = models.HistoriaClinica(**historia.dict(), ID_Paciente=paciente_id)
     db.add(db_historia)
     db.commit()
     db.refresh(db_historia)
     return db_historia
 
-# Consulta CRUD operations
+# Operaciones CRUD para el modelo Consulta
 def get_consulta(db: Session, consulta_id: int):
     return db.query(models.Consulta).filter(models.Consulta.ID_Consulta == consulta_id).first()
 
 def get_consultas(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Consulta).offset(skip).limit(limit).all()
 
-def create_consulta(db: Session, consulta: schemas.ConsultaCreate):
-    db_consulta = models.Consulta(**consulta.dict())
+def create_consulta(db: Session, consulta: schemas.ConsultaCreate, historia_id: int):
+    db_consulta = models.Consulta(**consulta.dict(), ID_HistoriaC=historia_id)
+    db.add(db_consulta)
+    db.commit()
+    db.refresh(db_consulta)
+    return db_consulta
+
+def update_consulta(db: Session, consulta: schemas.Consulta):
+    db_consulta = get_consulta(db, consulta.ID_Consulta)
+    if db_consulta is None:
+        return None
+    for var, value in vars(consulta).items():
+        setattr(db_consulta, var, value) if value else None
     db.add(db_consulta)
     db.commit()
     db.refresh(db_consulta)
