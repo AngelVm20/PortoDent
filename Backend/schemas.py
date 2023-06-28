@@ -27,7 +27,7 @@ class HistoriaClinicaCreate(HistoriaClinicaBase):
     pass
 
 class HistoriaClinica(HistoriaClinicaBase):
-    ID_Historia: int
+    ID_Historia: Optional[int]
 
     class Config:
         orm_mode = True

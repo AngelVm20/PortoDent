@@ -29,5 +29,5 @@ def read_historias_clinicas(skip: int = 0, limit: int = 100, db: Session = Depen
 
 @router.post("/historias_clinicas/", response_model=schemas.HistoriaClinica)
 def create_historia_clinica(historia: schemas.HistoriaClinicaCreate, db: Session = Depends(get_db)):
-    db_historia = crud.create_historia_clinica(db=db, historia=historia)
+    db_historia = crud.create_historia_clinica(db=db, historia=historia, paciente_id=historia.ID_Paciente)
     return db_historia

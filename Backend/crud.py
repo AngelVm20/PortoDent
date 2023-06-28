@@ -44,11 +44,13 @@ def get_historias_clinicas(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.HistoriaClinica).offset(skip).limit(limit).all()
 
 def create_historia_clinica(db: Session, historia: schemas.HistoriaClinicaCreate, paciente_id: int):
-    db_historia = models.HistoriaClinica(**historia.dict(), ID_Paciente=paciente_id)
+    db_historia = models.HistoriaClinica(**historia.dict())
+    db_historia.ID_Paciente = paciente_id  # Asignar paciente_id al atributo ID_Paciente
     db.add(db_historia)
     db.commit()
     db.refresh(db_historia)
     return db_historia
+
 
 # Operaciones CRUD para el modelo Consulta
 def get_consulta(db: Session, consulta_id: int):
