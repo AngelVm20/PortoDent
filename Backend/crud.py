@@ -67,8 +67,8 @@ def create_consulta(db: Session, consulta: schemas.ConsultaCreate, historia_id: 
     db.refresh(db_consulta)
     return db_consulta
 
-def update_consulta(db: Session, consulta: schemas.Consulta):
-    db_consulta = get_consulta(db, consulta.ID_Consulta)
+def update_consulta(db: Session, consulta_id: int, consulta: schemas.Consulta):
+    db_consulta = get_consulta(db, consulta_id)
     if db_consulta is None:
         return None
     for var, value in vars(consulta).items():

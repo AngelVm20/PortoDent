@@ -51,7 +51,7 @@ class ConsultaCreate(ConsultaBase):
     pass
 
 class Consulta(ConsultaBase):
-    ID_Consulta: int
+    ID_Consulta: Optional[str]
 
     class Config:
         orm_mode = True
