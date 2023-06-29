@@ -28,14 +28,30 @@ def update_paciente(db: Session, paciente_id: int, paciente: schemas.PacienteBas
     return db_paciente
 
 
+#def delete_paciente(db: Session, paciente_id: int):
+ #   db_paciente = get_paciente(db, paciente_id)
+  #  if db_paciente:
+   #     db.delete(db_paciente)
+    #    db.commit()
+     #   return db_paciente
+    #return None
+
 def delete_paciente(db: Session, paciente_id: int):
     db_paciente = get_paciente(db, paciente_id)
     if db_paciente:
+        # Eliminar todas las historias clínicas relacionadas al paciente
+        db_historias = db.query(models.HistoriaClinica).filter(models.HistoriaClinica.ID_Paciente == paciente_id).all()
+        for db_historia in db_historias:
+            # Eliminar todas las consultas relacionadas a la historia clínica
+            db_consultas = db.query(models.Consulta).filter(models.Consulta.ID_HistoriaC == db_historia.ID_HistoriaC).all()
+            for db_consulta in db_consultas:
+                db.delete(db_consulta)
+            db.delete(db_historia)
+
         db.delete(db_paciente)
         db.commit()
         return db_paciente
     return None
-
 # Operaciones CRUD para el modelo HistoriaClinica
 def get_historia_clinica(db: Session, historia_id: int):
     return db.query(models.HistoriaClinica).filter(models.HistoriaClinica.ID_HistoriaC == historia_id).first()
