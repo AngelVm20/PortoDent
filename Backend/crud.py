@@ -60,7 +60,8 @@ def get_consultas(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Consulta).offset(skip).limit(limit).all()
 
 def create_consulta(db: Session, consulta: schemas.ConsultaCreate, historia_id: int):
-    db_consulta = models.Consulta(**consulta.dict(), ID_HistoriaC=historia_id)
+    db_consulta = models.Consulta(**consulta.dict())
+    db_consulta.ID_HistoriaC=historia_id
     db.add(db_consulta)
     db.commit()
     db.refresh(db_consulta)

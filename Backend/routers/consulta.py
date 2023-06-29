@@ -26,10 +26,16 @@ def read_consultas(skip: int = 0, limit: int = 100, db: Session = Depends(get_db
     consultas = crud.get_consultas(db, skip=skip, limit=limit)
     return consultas
 
+#@router.post("/consultas/", response_model=schemas.Consulta)
+#def create_consulta(consulta: schemas.ConsultaCreate, db: Session = Depends(get_db)):
+#    db_consulta = crud.create_consulta(db=db, consulta=consulta)
+ #   return db_consulta
+
 @router.post("/consultas/", response_model=schemas.Consulta)
 def create_consulta(consulta: schemas.ConsultaCreate, db: Session = Depends(get_db)):
-    db_consulta = crud.create_consulta(db=db, consulta=consulta)
+    db_consulta = crud.create_consulta(db=db, consulta=consulta, historia_id=consulta.ID_HistoriaC)
     return db_consulta
+
 
 @router.put("/consultas/{consulta_id}", response_model=schemas.Consulta)
 def update_consulta(consulta_id: int, consulta: schemas.Consulta, db: Session = Depends(get_db)):
