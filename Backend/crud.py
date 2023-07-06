@@ -68,6 +68,7 @@ def create_historia_clinica(db: Session, historia: schemas.HistoriaClinicaCreate
     return db_historia
 
 
+
 # Operaciones CRUD para el modelo Consulta
 def get_consulta(db: Session, consulta_id: int):
     return db.query(models.Consulta).filter(models.Consulta.ID_Consulta == consulta_id).first()
