@@ -94,3 +94,6 @@ def update_consulta(db: Session, consulta_id: int, consulta: schemas.Consulta):
     db.commit()
     db.refresh(db_consulta)
     return db_consulta
+
+def get_consultas_by_historia(db: Session, historia_id: int):
+    return db.query(models.Consulta).filter(models.Consulta.ID_HistoriaC == historia_id).all()

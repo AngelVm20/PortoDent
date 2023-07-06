@@ -26,10 +26,7 @@ def read_consultas(skip: int = 0, limit: int = 100, db: Session = Depends(get_db
     consultas = crud.get_consultas(db, skip=skip, limit=limit)
     return consultas
 
-#@router.post("/consultas/", response_model=schemas.Consulta)
-#def create_consulta(consulta: schemas.ConsultaCreate, db: Session = Depends(get_db)):
-#    db_consulta = crud.create_consulta(db=db, consulta=consulta)
- #   return db_consulta
+
 
 @router.post("/consultas/", response_model=schemas.Consulta)
 def create_consulta(consulta: schemas.ConsultaCreate, db: Session = Depends(get_db)):
@@ -43,3 +40,8 @@ def update_consulta(consulta_id: int, consulta: schemas.Consulta, db: Session = 
     if db_consulta is None:
         raise HTTPException(status_code=404, detail="Consulta no encontrada")
     return db_consulta
+
+@router.get("/historias_clinicas/{historia_id}/consultas", response_model=List[schemas.Consulta])
+def read_consultas_by_historia(historia_id: int, db: Session = Depends(get_db)):
+    consultas = crud.get_consultas_by_historia(db, historia_id=historia_id)
+    return consultas
