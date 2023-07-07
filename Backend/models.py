@@ -9,7 +9,7 @@ class Paciente(Base):
     __tablename__ = "Paciente"
 
     ID_Paciente = Column(Integer, primary_key=True, index=True)
-    Cedula = Column(VARCHAR(20), index=True)
+    Cedula = Column(VARCHAR(20), unique=True, index=True)
     Nombre = Column(VARCHAR(50))
     Apellido = Column(VARCHAR(50))
     Sexo = Column(VARCHAR(10))

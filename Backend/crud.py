@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
 import models, schemas
+from fastapi import HTTPException
 
 # Operaciones CRUD para el modelo Paciente
 def get_paciente(db: Session, paciente_id: int):
@@ -9,11 +10,18 @@ def get_pacientes(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Paciente).offset(skip).limit(limit).all()
 
 def create_paciente(db: Session, paciente: schemas.PacienteCreate):
+    # Comprobar si ya existe un paciente con esa cédula
+    db_paciente = db.query(models.Paciente).filter(models.Paciente.Cedula == paciente.Cedula).first()
+    if db_paciente:
+        # Si existe, lanzar una excepción
+        raise HTTPException(status_code=400, detail="Número de identificación ya registrado")
+
     db_paciente = models.Paciente(**paciente.dict())
     db.add(db_paciente)
     db.commit()
     db.refresh(db_paciente)
     return db_paciente
+
 
 def update_paciente(db: Session, paciente_id: int, paciente: schemas.PacienteBase):
     db_paciente = get_paciente(db, paciente_id)
