@@ -27,14 +27,18 @@ def read_pacientes(skip: int = 0, limit: int = 100, db: Session = Depends(get_db
 #
 @router.post("/pacientes/", response_model=schemas.Paciente)
 def create_paciente(paciente: schemas.PacienteCreate, db: Session = Depends(get_db)):
-    db_paciente = crud.create_paciente(db=db, paciente=paciente)
-    # Crear automáticamente el historial médico
-    historia_clinica_create = schemas.HistoriaClinicaCreate(ID_Paciente=db_paciente.ID_Paciente)
-    db_historia = crud.create_historia_clinica(db=db, historia=historia_clinica_create, paciente_id=db_paciente.ID_Paciente)
-    db_paciente.historias_clinicas = [db_historia]
-    db.commit()
-    db.refresh(db_paciente)
-    return db_paciente
+    try:
+        db_paciente = crud.create_paciente(db=db, paciente=paciente)
+        # Crear automáticamente el historial médico
+        historia_clinica_create = schemas.HistoriaClinicaCreate(ID_Paciente=db_paciente.ID_Paciente)
+        db_historia = crud.create_historia_clinica(db=db, historia=historia_clinica_create, paciente_id=db_paciente.ID_Paciente)
+        db_paciente.historias_clinicas = [db_historia]
+        db.commit()
+        db.refresh(db_paciente)
+        return db_paciente
+    except HTTPException as e:
+        raise HTTPException(status_code=e.status_code, detail=e.detail)
+
 
 @router.put("/pacientes/{paciente_id}", response_model=schemas.Paciente)
 def update_paciente(paciente_id: int, paciente: schemas.Paciente, db: Session = Depends(get_db)):
