@@ -36,14 +36,6 @@ def update_paciente(db: Session, paciente_id: int, paciente: schemas.PacienteBas
     return db_paciente
 
 
-#def delete_paciente(db: Session, paciente_id: int):
- #   db_paciente = get_paciente(db, paciente_id)
-  #  if db_paciente:
-   #     db.delete(db_paciente)
-    #    db.commit()
-     #   return db_paciente
-    #return None
-
 def delete_paciente(db: Session, paciente_id: int):
     db_paciente = get_paciente(db, paciente_id)
     if db_paciente:
