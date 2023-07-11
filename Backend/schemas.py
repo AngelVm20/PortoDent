@@ -34,18 +34,49 @@ class HistoriaClinica(HistoriaClinicaBase):
 
 class ConsultaBase(BaseModel):
     ID_HistoriaC: Optional[int] = None
-    FechaConsulta: date
-    EnfActual: Optional[str] = None
-    Antecedentes: Optional[str] = None
-    SignosVitales: Optional[str] = None
-    ExamenEstomat: Optional[str] = None
-    Odontograma: Optional[str] = None
-    IndicadoresSalud: Optional[str] = None
-    IndicesCPO: Optional[str] = None
-    PlanDiagnostico: Optional[str] = None
-    Diagnostico: Optional[str] = None
-    Tratamientos: Optional[str] = None
+    RangoAños: Optional[str] = None
+    #1
     MotivoC: Optional[str] = None
+    #2
+    EnfActual: Optional[str] = None
+    #3
+    OpcionesAntecedentes: Optional[str] = None
+    Antecedentes: Optional[str] = None
+    #4
+    SignosVitales: Optional[str] = None
+    FrecuenciaCar: Optional[str] = None
+    Temperatura: Optional[str] = None
+    FrecuenciaRes: Optional[str] = None
+    #5
+    OpcionesEstomatognatico: Optional[str] = None
+    ExamenEstomat: Optional[str] = None
+    #6
+    Odontograma: Optional[str] = None
+    #7
+    IndicadoresSalud: Optional[str] = None
+    EnfermedadPerio: Optional[str] = None
+    MalOclusion: Optional[str] = None
+    Fluorosis: Optional[str] = None
+    #8
+    IndicesCPO: Optional[str] = None
+    #10
+    OpcionPlan: Optional[str] = None
+    PlanDiagnostico: Optional[str] = None
+    #11
+    Diagnostico: Optional[str] = None
+    #12
+    FechaConsulta: date
+    Tratamientos: Optional[str] = None
+    Procedimientos: Optional[str] = None
+    Prescripcion: Optional[str] = None
+    Codigo: Optional[str] = None
+    
+    
+    
+    
+    
+    
+    
 
 class ConsultaCreate(ConsultaBase):
     pass

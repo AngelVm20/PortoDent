@@ -34,17 +34,37 @@ class Consulta(Base):
 
     ID_Consulta = Column(Integer, primary_key=True, index=True)
     ID_HistoriaC = Column(Integer, ForeignKey("HistoriaClinica.ID_HistoriaC"))
-    FechaConsulta = Column(Date)
+    RangoAños = Column(VARCHAR(200))
+    MotivoC = Column(VARCHAR(200))
     EnfActual = Column(VARCHAR(200))
+    OpcionesAntecedentes = Column(VARCHAR(200))
     Antecedentes = Column(VARCHAR(200))
     SignosVitales = Column(VARCHAR(200))
+    FrecuenciaCar= Column(VARCHAR(200))
+    Temperatura= Column(VARCHAR(200))
+    FrecuenciaRes= Column(VARCHAR(200))
+    OpcionesEstomatognatico= Column(VARCHAR(200))
     ExamenEstomat = Column(VARCHAR(200))
     Odontograma = Column(VARCHAR(200))
     IndicadoresSalud = Column(VARCHAR(200))
+    EnfermedadPerio= Column(VARCHAR(200))
+    MalOclusion= Column(VARCHAR(200))
+    Fluorosis= Column(VARCHAR(200))
     IndicesCPO = Column(VARCHAR(200))
+    OpcionPlan = Column(VARCHAR(200))
     PlanDiagnostico = Column(VARCHAR(200))
     Diagnostico = Column(VARCHAR(200))
+    FechaConsulta = Column(Date)
     Tratamientos = Column(VARCHAR(200))
-    MotivoC = Column(VARCHAR(200))
+    Procedimientos= Column(VARCHAR(200))
+    Prescripcion= Column(VARCHAR(200))
+    Codigo= Column(VARCHAR(200))
+    
+
+    
+    
+    
+    
+    
 
     historia_clinica = relationship("HistoriaClinica", back_populates="consultas")
