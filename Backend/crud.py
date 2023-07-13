@@ -2,6 +2,7 @@ from sqlalchemy.orm import Session
 import models, schemas
 from fastapi import HTTPException
 
+
 # Operaciones CRUD para el modelo Paciente
 def get_paciente(db: Session, paciente_id: int):
     return db.query(models.Paciente).filter(models.Paciente.ID_Paciente == paciente_id).first()
@@ -52,6 +53,8 @@ def delete_paciente(db: Session, paciente_id: int):
         db.commit()
         return db_paciente
     return None
+
+
 # Operaciones CRUD para el modelo HistoriaClinica
 def get_historia_clinica(db: Session, historia_id: int):
     return db.query(models.HistoriaClinica).filter(models.HistoriaClinica.ID_HistoriaC == historia_id).first()

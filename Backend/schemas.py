@@ -71,13 +71,6 @@ class ConsultaBase(BaseModel):
     Prescripcion: Optional[str] = None
     Codigo: Optional[str] = None
     
-    
-    
-    
-    
-    
-    
-
 class ConsultaCreate(ConsultaBase):
     pass
 
