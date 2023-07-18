@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Date
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Date, Float
 from sqlalchemy.dialects.mysql import VARCHAR
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
@@ -46,14 +46,61 @@ class Consulta(Base):
     OpcionesEstomatognatico= Column(VARCHAR(200))
     ExamenEstomat = Column(VARCHAR(200))
     Odontograma = Column(VARCHAR(200))
-    IndicadoresSalud = Column(VARCHAR(200))
+
+    PiezaDental16_17_55 = Column(VARCHAR(200))
+    PiezaDental11_21_51 = Column(VARCHAR(200))
+    PiezaDental26_27_65 = Column(VARCHAR(200))
+    PiezaDental36_37_75 = Column(VARCHAR(200))
+    PiezaDental31_41_71 = Column(VARCHAR(200))
+    PiezaDental46_47_85 = Column(VARCHAR(200))
+
+    Placa16_17_55 = Column(Integer)
+    Placa11_21_51 = Column(Integer)
+    Placa26_27_65 = Column(Integer)
+    Placa36_37_75 = Column(Integer)
+    Placa31_41_71 = Column(Integer)
+    Placa46_47_85 = Column(Integer)
+
+    Calculo16_17_55 = Column(Integer)
+    Calculo11_21_51 = Column(Integer)
+    Calculo26_27_65 = Column(Integer)
+    Calculo36_37_75 = Column(Integer)
+    Calculo31_41_71 = Column(Integer)
+    Calculo46_47_85 = Column(Integer)
+    
+    Gingivitis16_17_55 = Column(Integer)
+    Gingivitis11_21_51 = Column(Integer)
+    Gingivitis26_27_65 = Column(Integer)
+    Gingivitis36_37_75 = Column(Integer)
+    Gingivitis31_41_71 = Column(Integer)
+    Gingivitis46_47_85 = Column(Integer)
+
+    TotalPlaca = Column(Float)
+    TotalCalculo = Column(Float) 
+    TotalGingivitis = Column(Float) 
+
     EnfermedadPerio= Column(VARCHAR(200))
     MalOclusion= Column(VARCHAR(200))
     Fluorosis= Column(VARCHAR(200))
-    IndicesCPO = Column(VARCHAR(200))
+
+    IndiceC = Column(Integer) 
+    IndiceP = Column(Integer)
+    IndiceO = Column(Integer)
+    TotalCPO = Column(Integer) 
+    Indicedc = Column(Integer) 
+    Indicede = Column(Integer) 
+    Indicedo = Column(Integer)
+    Totalceo = Column(Integer)
+
     OpcionPlan = Column(VARCHAR(200))
     PlanDiagnostico = Column(VARCHAR(200))
+
     Diagnostico = Column(VARCHAR(200))
+    Cie = Column(VARCHAR(200))
+    PreoDef = Column(VARCHAR(200))
+    FechaProximaConsulta = Column(Date)
+
+
     FechaConsulta = Column(Date)
     Tratamientos = Column(VARCHAR(200))
     Procedimientos= Column(VARCHAR(200))
