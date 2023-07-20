@@ -56,109 +56,88 @@ def consulta_to_xlsx(consulta: schemas.Consulta, paciente: schemas.Paciente):
     ws['A24'] = consulta.Odontograma
 
     #Esto es con respecto al punto 7 indicadores de salud bucal
-    ws['J48'] = consulta.IndicadoresSalud
-    ws['J49'] = consulta.EnfermedadPerio
-    ws['J50'] = consulta.MalOclusion
-    ws['J51'] = consulta.Fluorosis
+
+    #HIGIENE ORAL SIMPLIFICADA 
+    #PIEZAS DENTALES
+    ws['C50'] = consulta.PiezaDental16_17_55
+    ws['C51'] = consulta.PiezaDental11_21_51
+    ws['C52'] = consulta.PiezaDental26_27_65
+    ws['C54'] = consulta.PiezaDental36_37_75
+    ws['C55'] = consulta.PiezaDental31_41_71
+    ws['C56'] = consulta.PiezaDental46_47_85
+
+
+    #PLACA 
+    ws['D50'] = consulta.Placa16_17_55
+    ws['D51'] = consulta.Placa11_21_51
+    ws['D52'] = consulta.Placa26_27_65
+    ws['D54'] = consulta.Placa36_37_75
+    ws['D55'] = consulta.Placa31_41_71
+    ws['D56'] = consulta.Placa46_47_85
+    ws['D57'] = consulta.TotalPlaca
+
+    #CALCULO
+    ws['F50'] = consulta.Calculo16_17_55
+    ws['F51'] = consulta.Calculo11_21_51
+    ws['F52'] = consulta.Calculo26_27_65
+    ws['F54'] = consulta.Calculo36_37_75
+    ws['F55'] = consulta.Calculo31_41_71
+    ws['F56'] = consulta.Calculo46_47_85
+    ws['F57'] = consulta.TotalCalculo
+
+
+    #GINGIVITIS
+    ws['H50'] = consulta.Gingivitis16_17_55
+    ws['H51'] = consulta.Gingivitis11_21_51
+    ws['H52'] = consulta.Gingivitis26_27_65
+    ws['H54'] = consulta.Gingivitis36_37_75
+    ws['H55'] = consulta.Gingivitis31_41_71
+    ws['H56'] = consulta.Gingivitis46_47_85
+    ws['H57'] = consulta.TotalGingivitis
+
+    #ENF. PERIODONTAL
+    ws['M49'] = consulta.EnfermedadPerio
+
+    #MAL OCLUSION
+    ws['O49'] = consulta.MalOclusion
+
+    #FLUOROSIS
+    ws['Q49'] = consulta.Fluorosis
+
+
 
     #Esto es con respecto al punto 8 Indices CPO-ceo
-    ws['S48'] = consulta.IndicesCPO
+    #Indice D
+    ws['T49'] = consulta.IndiceC
+    ws['U49'] = consulta.IndiceP
+    ws['V49'] = consulta.IndiceO
+    ws['W49'] = consulta.TotalCPO
 
-    #Esto es con respecto al punto 9 planes de diagnostico, terapeutico y educacional
-    ws['D61'] = consulta.OpcionPlan
-    ws['A62'] = consulta.PlanDiagnostico
+    #Indice d
+    ws['T51'] = consulta.Indicedc
+    ws['U51'] = consulta.Indicede
+    ws['V51'] = consulta.Indicedo
+    ws['W51'] = consulta.Totalceo
+
+    #Esto es con respecto al punto 10 planes de diagnostico, terapeutico y educacional
+    ws['D60'] = consulta.OpcionPlan
+    ws['A61'] = consulta.PlanDiagnostico
 
     #Esto es con respecto al punto 11 diagnostico
-    ws['A65'] = consulta.Diagnostico
+    ws['B64'] = consulta.Diagnostico
+    ws['M64'] = consulta.Cie
+    ws['P64'] = consulta.PreoDef
+    ws['F66'] = consulta.FechaProximaConsulta
 
     #Esto es con respecto al punto 12 tratamiento
-    ws['D73'] = consulta.Tratamientos
-    ws['I73'] = consulta.Procedimientos
-    ws['B74'] = consulta.FechaConsulta
-    ws['O73'] = consulta.Prescripcion
-    ws['V73'] = consulta.Codigo
-
+    ws['D70'] = consulta.Tratamientos
+    ws['I70'] = consulta.Procedimientos
+    ws['B71'] = consulta.FechaConsulta
+    ws['O70'] = consulta.Prescripcion
+    ws['V70'] = consulta.Codigo
 
     # Guardar el archivo temporalmente y retornar su nombre
     filename = f"{paciente.Nombre}{paciente.Apellido}_{paciente.Cedula}_consulta.xlsx"
-    wb.save(filename)
-    return filename
-
-
-def historia_to_xlsx(historia: schemas.HistoriaClinica, paciente: schemas.Paciente, db: Session):
-    # Cargar la plantilla
-    wb = load_workbook('template.xlsx')
-    ws = wb.active
-
-    # Datos de cabecera de la historia clinica
-    ws['D2'] = paciente.Nombre
-    ws['H2'] = paciente.Apellido
-    ws['M2'] = paciente.Sexo
-    ws['N2'] = calcular_edad(paciente.FechaNacimiento)
-    ws['O2'] = historia.ID_HistoriaC
-
-    # Obtener todas las consultas para esta historia clínica
-    consultas = crud.get_consultas_by_historia(db, historia.ID_HistoriaC)
-    
-    for i, consulta in enumerate(consultas):
-        # Si esta no es la primera consulta, insertar filas para hacer espacio para los nuevos datos
-        if i != 0:
-            ws.insert_rows(idx=7, amount=70)  # Ajusta el número de filas según tu plantilla
-
-        # Actualizar el índice para reflejar las filas insertadas
-        idx = i * 70  # Ajusta esto según el número de filas que has insertado
-
-        #Esto es el campo ciclo de vida del paciente 
-        ws['B4'] = consulta.RangoAños
-
-        #Esto ya es con respecto al punto 1 motivo de la consulta
-        ws[f'A{7+idx}'] = consulta.MotivoC
-
-        #Esto es con respecto al punto 2 enfermedad o problema actual
-        ws[f'A{10+idx}'] = consulta.EnfActual
-
-        #Esto es con respecto al punto 3 antecedentes personales y familiares
-        ws[f'B{13+idx}'] = consulta.OpcionesAntecedentes
-        ws[f'A{14+idx}'] = consulta.Antecedentes
-
-        #Esto es con respecto al punto 4 Signos vitales
-        ws[f'B{17+idx}'] = consulta.SignosVitales
-        ws[f'F{17+idx}'] = consulta.FrecuenciaCar
-        ws[f'J{17+idx}'] = consulta.Temperatura
-        ws[f'O{17+idx}'] = consulta.FrecuenciaRes
-
-        #Esto es con respecto al punto 5 Examen del sistema estognatico
-        ws[f'C{20+idx}'] = consulta.OpcionesEstomatognatico
-        ws[f'A{21+idx}'] = consulta.ExamenEstomat
-
-        #Esto es con respecto al punto 6 Odontograma
-        ws['A24'] = consulta.Odontograma
-
-        #Esto es con respecto al punto 7 indicadores de salud bucal
-        ws[f'J{48+idx}'] = consulta.IndicadoresSalud
-        ws[f'J{49+idx}'] = consulta.EnfermedadPerio
-        ws[f'J{50+idx}'] = consulta.MalOclusion
-        ws[f'J{51+idx}'] = consulta.Fluorosis
-
-        #Esto es con respecto al punto 8 Indices CPO-ceo
-        ws[f'S{48+idx}'] = consulta.IndicesCPO
-
-        #Esto es con respecto al punto 10 planes de diagnostico, terapeutico y educacional
-        ws[f'D{61+idx}'] = consulta.OpcionPlan
-        ws[f'A{62+idx}'] = consulta.PlanDiagnostico
-
-        #Esto es con respecto al punto 11 diagnostico
-        ws[f'A{65+idx}'] = consulta.Diagnostico
-
-        #Esto es con respecto al punto 12 tratamiento
-        ws[f'D{73+idx}'] = consulta.Tratamientos
-        ws[f'I{73+idx}'] = consulta.Procedimientos
-        ws[f'B{74+idx}'] = consulta.FechaConsulta
-        ws[f'O{73+idx}'] = consulta.Prescripcion
-        ws[f'V{73+idx}'] = consulta.Codigo
-
-    # Guardar el archivo y retornar su nombre
-    filename = f"{paciente.Nombre}{paciente.Apellido}_{paciente.Cedula}_historia.xlsx"
     wb.save(filename)
     return filename
 
