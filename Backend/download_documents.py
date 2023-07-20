@@ -137,7 +137,7 @@ def consulta_to_xlsx(consulta: schemas.Consulta, paciente: schemas.Paciente):
     ws['V70'] = consulta.Codigo
 
     # Guardar el archivo temporalmente y retornar su nombre
-    filename = f"{paciente.Nombre}{paciente.Apellido}_{paciente.Cedula}_consulta.xlsx"
+    filename = f"{paciente.Nombre}{paciente.Apellido}_{paciente.Cedula}_{consulta.FechaConsulta}_consulta.xlsx"
     wb.save(filename)
     return filename
 

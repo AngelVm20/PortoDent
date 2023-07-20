@@ -16,7 +16,9 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],  # Permite todos los métodos
     allow_headers=["*"],  # Permite todas las cabeceras
+    expose_headers=["Content-Disposition"],  # Exponer el header `Content-Disposition`
 )
+
 
 
 app.include_router(consulta_router)

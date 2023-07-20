@@ -4,7 +4,11 @@ from sqlalchemy.orm import Session
 import crud, schemas
 import download_documents as dd
 from database import SessionLocal
-from fastapi.responses import FileResponse
+from fastapi.responses import StreamingResponse, Response
+import os
+from urllib.parse import quote
+
+
 
 
 router = APIRouter()
@@ -49,10 +53,8 @@ def read_consultas_by_historia(historia_id: int, db: Session = Depends(get_db)):
     consultas = crud.get_consultas_by_historia(db, historia_id=historia_id)
     return consultas
 
-
-
-@router.get("/consultas/{consulta_id}/download", response_model=schemas.Consulta)
-def download_consulta(consulta_id: int, db: Session = Depends(get_db)):
+@router.get("/consultas/{consulta_id}/download")
+async def download_consulta(consulta_id: int, db: Session = Depends(get_db)):
     db_consulta = crud.get_consulta(db, consulta_id=consulta_id)
     if db_consulta is None:
         raise HTTPException(status_code=404, detail="Consulta no encontrada")
@@ -61,22 +63,15 @@ def download_consulta(consulta_id: int, db: Session = Depends(get_db)):
     
     filename = dd.consulta_to_xlsx(db_consulta, db_paciente)
 
-    return FileResponse(filename, media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', filename=filename)
+    def iterfile():  # función generadora
+        with open(filename, mode="rb") as file:  # abre el archivo en modo binario
+            yield from file  # lee y envía el archivo
+        # Se ha movido la eliminación del archivo aquí
+        os.remove(filename)  # elimina el archivo una vez que se ha leído completamente
 
+    response = StreamingResponse(iterfile(), media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
 
-@router.get("/historia/{historia_id}/download", response_model=schemas.Consulta)
-def download_historia(historia_id: int, db: Session = Depends(get_db)):
-    historia_clinica = crud.get_historia_clinica(db, historia_id=historia_id)
-    if historia_clinica is None:
-        raise HTTPException(status_code=404, detail="Historia clinica no encontrada")
-    consultas = crud.get_consultas_by_historia(db, historia_id=historia_id)
-    if consultas is None:
-        raise HTTPException(status_code=404, detail="No hay consultas para esta historia clinica")
-    paciente = crud.get_paciente(db, paciente_id=historia_clinica.ID_Paciente)
-    if paciente is None:
-        raise HTTPException(status_code=404, detail="Paciente no encontrado")
-    filename = dd.historia_to_xlsx(historia_clinica, paciente, db)
-    return FileResponse(filename, media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    file_name = quote(filename)  # Esto ayuda a manejar caracteres especiales y espacios en el nombre del archivo
+    response.headers["Content-Disposition"] = f"attachment; filename={file_name}"
 
-
-
+    return response
