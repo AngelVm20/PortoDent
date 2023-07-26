@@ -1,6 +1,6 @@
 from typing import Optional
 from pydantic import BaseModel
-from datetime import date
+from datetime import datetime,date
 
 class PacienteBase(BaseModel):
     Cedula: str
@@ -24,10 +24,13 @@ class HistoriaClinicaBase(BaseModel):
     ID_Paciente: int
 
 class HistoriaClinicaCreate(HistoriaClinicaBase):
+    FechaApertura: date = datetime.now().date()
     pass
 
 class HistoriaClinica(HistoriaClinicaBase):
     ID_HistoriaC: Optional[int]
+    FechaApertura:  Optional[date] = datetime.now().isoformat()  # Agregar el campo FechaApertura
+
 
     class Config:
         orm_mode = True

@@ -14,7 +14,7 @@ def get_db():
         db.close()
 
 
-def consulta_to_xlsx(consulta: schemas.Consulta, paciente: schemas.Paciente):
+def consulta_to_xlsx(consulta: schemas.Consulta, paciente: schemas.Paciente, historia: schemas.HistoriaClinica):
     # Cargar la plantilla
     wb = load_workbook('template.xlsx')
     ws = wb.active
@@ -127,6 +127,8 @@ def consulta_to_xlsx(consulta: schemas.Consulta, paciente: schemas.Paciente):
     ws['B49'] = consulta.Diagnostico
     ws['L49'] = consulta.Cie
     ws['Q49'] = consulta.PreoDef
+
+    ws['B51'] = historia.FechaApertura
     ws['E51'] = consulta.FechaProximaConsulta
 
     #Esto es con respecto al punto 12 tratamiento

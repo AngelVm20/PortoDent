@@ -25,6 +25,7 @@ class HistoriaClinica(Base):
 
     ID_HistoriaC = Column(Integer, primary_key=True, index=True)
     ID_Paciente = Column(Integer, ForeignKey("Paciente.ID_Paciente"))
+    FechaApertura  = Column(Date)
 
     paciente = relationship("Paciente", back_populates="historias_clinicas")
     consultas = relationship("Consulta", back_populates="historia_clinica")

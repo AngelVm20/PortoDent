@@ -1,6 +1,8 @@
 from typing import List
 from fastapi import Depends, APIRouter, HTTPException
 from sqlalchemy.orm import Session
+from datetime import datetime
+
 
 import crud, models, schemas
 from database import SessionLocal, engine
@@ -17,10 +19,10 @@ def get_db():
 # HistoriaClinica
 @router.get("/historias_clinicas/{historia_id}", response_model=schemas.HistoriaClinica)
 def read_historia_clinica(historia_id: int, db: Session = Depends(get_db)):
-    db_historia = crud.get_historia_clinica(db, historia_id=historia_id)
-    if db_historia is None:
-        raise HTTPException(status_code=404, detail="Historia Clínica no encontrada")
-    return db_historia
+    historia_clinica = crud.get_historia_clinica(db, historia_id)
+    if historia_clinica is None:
+        raise HTTPException(status_code=404, detail="Historia clínica no encontrada")
+    return historia_clinica
 
 @router.get("/historias_clinicas/", response_model=List[schemas.HistoriaClinica])
 def read_historias_clinicas(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
@@ -35,5 +37,11 @@ def create_historia_clinica(historia: schemas.HistoriaClinicaCreate, db: Session
         raise HTTPException(status_code=404, detail="Paciente no encontrado")
     if paciente.historias_clinicas:
         raise HTTPException(status_code=400, detail="El paciente ya tiene una historia clínica asociada")
-    db_historia = crud.create_historia_clinica(db=db, historia=historia, paciente_id=historia.ID_Paciente)
+
+    # Convertir la fecha a formato ISO y asignarla al campo FechaApertura
+    fecha_apertura = datetime.now().isoformat()
+    historia_dict = historia.dict()
+    historia_dict["FechaApertura"] = fecha_apertura
+
+    db_historia = crud.create_historia_clinica(db=db, historia=schemas.HistoriaClinicaCreate(**historia_dict), paciente_id=historia.ID_Paciente)
     return db_historia

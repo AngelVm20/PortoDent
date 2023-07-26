@@ -1,6 +1,8 @@
 from sqlalchemy.orm import Session
 import models, schemas
 from fastapi import HTTPException
+from datetime import date,datetime
+
 
 
 # Operaciones CRUD para el modelo Paciente
@@ -63,8 +65,12 @@ def get_historias_clinicas(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.HistoriaClinica).offset(skip).limit(limit).all()
 
 def create_historia_clinica(db: Session, historia: schemas.HistoriaClinicaCreate, paciente_id: int):
-    db_historia = models.HistoriaClinica(**historia.dict())
-    db_historia.ID_Paciente = paciente_id  # Asignar paciente_id al atributo ID_Paciente
+     # Generar la fecha de apertura automáticamente
+    historia_dict = historia.dict()
+    historia_dict["FechaApertura"] = datetime.now().date()
+
+    db_historia = models.HistoriaClinica(**historia_dict)
+    db_historia.ID_Paciente = paciente_id
     db.add(db_historia)
     db.commit()
     db.refresh(db_historia)
