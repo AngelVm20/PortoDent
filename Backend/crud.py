@@ -86,8 +86,19 @@ def get_consultas(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Consulta).offset(skip).limit(limit).all()
 
 def create_consulta(db: Session, consulta: schemas.ConsultaCreate, historia_id: int):
-    db_consulta = models.Consulta(**consulta.dict())
-    db_consulta.ID_HistoriaC=historia_id
+    # Obtener la última sesión para esta historia clínica
+    last_session = db.query(models.Consulta.Sesion).filter(models.Consulta.ID_HistoriaC == historia_id).order_by(models.Consulta.Sesion.desc()).first()
+
+    if last_session:
+        next_session = last_session.Sesion + 1  # Incrementar el contador de sesión
+    else:
+        next_session = 1  # Si no hay consultas previas para esta historia, comenzar desde 1
+
+    consulta_dict = consulta.dict()
+    consulta_dict["Sesion"] = next_session
+
+    db_consulta = models.Consulta(**consulta_dict)
+    db_consulta.ID_HistoriaC = historia_id
     db.add(db_consulta)
     db.commit()
     db.refresh(db_consulta)

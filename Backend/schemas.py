@@ -115,6 +115,8 @@ class ConsultaBase(BaseModel):
     Procedimientos: Optional[str] = None
     Prescripcion: Optional[str] = None
     Codigo: Optional[str] = None
+    Sesion: Optional[int] = 1
+    
     
 class ConsultaCreate(ConsultaBase):
     pass

@@ -107,4 +107,6 @@ class Consulta(Base):
     Procedimientos= Column(VARCHAR(200))
     Prescripcion= Column(VARCHAR(200))
     Codigo= Column(VARCHAR(200))
+    Sesion = Column(Integer, default=1)
+
     historia_clinica = relationship("HistoriaClinica", back_populates="consultas")
