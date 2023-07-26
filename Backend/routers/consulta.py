@@ -60,8 +60,9 @@ async def download_consulta(consulta_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Consulta no encontrada")
     
     db_paciente = db_consulta.historia_clinica.paciente
+    db_historia = db_consulta.historia_clinica  # Corrige aquí, obteniendo la historia_clinica completa
     
-    filename = dd.consulta_to_xlsx(db_consulta, db_paciente)
+    filename = dd.consulta_to_xlsx(db_consulta, db_paciente, db_historia)
 
     def iterfile():  # función generadora
         with open(filename, mode="rb") as file:  # abre el archivo en modo binario
