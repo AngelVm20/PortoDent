@@ -17,6 +17,7 @@ def get_db():
         db.close()
 
 # HistoriaClinica
+
 @router.get("/historias_clinicas/{historia_id}", response_model=schemas.HistoriaClinica)
 def read_historia_clinica(historia_id: int, db: Session = Depends(get_db)):
     historia_clinica = crud.get_historia_clinica(db, historia_id)
@@ -29,14 +30,15 @@ def read_historias_clinicas(skip: int = 0, limit: int = 100, db: Session = Depen
     historias_clinicas = crud.get_historias_clinicas(db, skip=skip, limit=limit)
     return historias_clinicas
 
-
 @router.post("/historias_clinicas/", response_model=schemas.HistoriaClinica)
+
 def create_historia_clinica(historia: schemas.HistoriaClinicaCreate, db: Session = Depends(get_db)):
     paciente = crud.get_paciente(db, paciente_id=historia.ID_Paciente)
     if paciente is None:
-        raise HTTPException(status_code=404, detail="Paciente no encontrado")
+
+        raise HTTPException(status_code=404, detail="Paciente no encontrado en la base de datos")
     if paciente.historias_clinicas:
-        raise HTTPException(status_code=400, detail="El paciente ya tiene una historia clínica asociada")
+        raise HTTPException(status_code=400, detail="El paciente ya tiene una historia clínica asociada a su registro")
 
     # Convertir la fecha a formato ISO y asignarla al campo FechaApertura
     fecha_apertura = datetime.now().isoformat()
