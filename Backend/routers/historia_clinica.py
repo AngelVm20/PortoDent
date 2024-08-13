@@ -30,6 +30,14 @@ def read_historias_clinicas(skip: int = 0, limit: int = 100, db: Session = Depen
     historias_clinicas = crud.get_historias_clinicas(db, skip=skip, limit=limit)
     return historias_clinicas
 
+@router.get("/historias_clinicas/paciente/{paciente_id}", response_model=schemas.HistoriaClinica)
+def read_historia_clinica_paciente(paciente_id: int, db: Session = Depends(get_db)):
+    historia_clinica = crud.get_historias_clinicas(db, paciente_id)
+    if historia_clinica is None:
+        raise HTTPException(status_code=404, detail="Historia clínica no encontrada")
+    return historia_clinica
+
+
 @router.post("/historias_clinicas/", response_model=schemas.HistoriaClinica)
 
 def create_historia_clinica(historia: schemas.HistoriaClinicaCreate, db: Session = Depends(get_db)):
