@@ -55,3 +55,11 @@ def create_historia_clinica(historia: schemas.HistoriaClinicaCreate, db: Session
 
     db_historia = crud.create_historia_clinica(db=db, historia=schemas.HistoriaClinicaCreate(**historia_dict), paciente_id=historia.ID_Paciente)
     return db_historia
+
+# Actualizar historia clínica
+@router.put("/historias_clinicas/{historia_id}", response_model=schemas.HistoriaClinica)
+def update_historia_clinica(historia_id: int, historia: schemas.HistoriaClinica, db: Session = Depends(get_db)):
+    db_historia = crud.update_historia_clinica(db=db, historia_id=historia_id, historia=historia)
+    if db_historia is None:
+        raise HTTPException(status_code=404, detail="Historia clínica no encontrada")
+    return db_historia
