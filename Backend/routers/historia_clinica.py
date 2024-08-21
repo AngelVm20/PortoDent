@@ -63,3 +63,11 @@ def update_historia_clinica(historia_id: int, historia: schemas.HistoriaClinica,
     if db_historia is None:
         raise HTTPException(status_code=404, detail="Historia clínica no encontrada")
     return db_historia
+
+# Eliminar historia clínica
+@router.delete("/historias_clinicas/{historia_id}", response_model=schemas.HistoriaClinica)
+def delete_historia_clinica(historia_id: int, db: Session = Depends(get_db)):
+    db_historia = crud.delete_historia_clinica(db=db, historia_id=historia_id)
+    if db_historia is None:
+        raise HTTPException(status_code=404, detail="Historia clínica no encontrada")
+    return db_historia
